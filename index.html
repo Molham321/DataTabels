@@ -8,18 +8,26 @@
     <title>Fetch API & Web Components</title>
 </head>
 <body>
-    <h3>Hello World</h3>
+    <!-- Navbar -->
+    <navigation-bar active="home" breakpoint="576">
+        <a slot="brand" href="#">Navbar</a>
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Content</a>
+    </navigation-bar>
 
-
+    <!-- user-card -->
     <user-card name="John Doe" avatar = "https://randomuser.me/api/portraits/men/1.jpg">
         <div slot="email">johndoe@gmail.com</div>
         <div slot="phone">555-555-5555</div>
     </user-card>
+
     <user-card name="Jane Doe" avatar = "https://randomuser.me/api/portraits/women/1.jpg">
         <div slot="email">janedoe@gmail.com</div>
         <div slot="phone">999-999-9999</div>
     </user-card>
 
+    <!-- fetch table -->
     <h1 class="text-center">Storing API data in table</h1>
     <table id = "customers">
         <tbody id="table_body">
@@ -28,5 +36,6 @@
 
     <script src="./script.js"></script>
     <script src="./userCard.js"></script>
+    <script src="./navigationBar.js"></script>
 </body>
 </html>

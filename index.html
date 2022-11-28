@@ -5,9 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
-    <title>Fetch API</title>
+    <title>Fetch API & Web Components</title>
 </head>
 <body>
+    <h3>Hello World</h3>
+
+
+    <user-card name="John Doe" avatar = "https://randomuser.me/api/portraits/men/1.jpg">
+        <div slot="email">johndoe@gmail.com</div>
+        <div slot="phone">555-555-5555</div>
+    </user-card>
+    <user-card name="Jane Doe" avatar = "https://randomuser.me/api/portraits/women/1.jpg">
+        <div slot="email">janedoe@gmail.com</div>
+        <div slot="phone">999-999-9999</div>
+    </user-card>
+
     <h1 class="text-center">Storing API data in table</h1>
     <table id = "customers">
         <tbody id="table_body">
@@ -15,5 +27,6 @@
     </table>
 
     <script src="./script.js"></script>
+    <script src="./userCard.js"></script>
 </body>
 </html>

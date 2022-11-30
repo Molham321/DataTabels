@@ -1,0 +1,101 @@
+{
+    /* Rules: https://eslint.org/docs/rules/
+    Codeconventions: http://jira.dako.de:8090/display/DEV/Code+Conventions
+    */
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "env": {
+        "browser": true
+    },
+    "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": "latest"
+    },
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "eqeqeq": 1,
+        "comma-dangle": [
+            1,
+            "only-multiline"
+        ],
+        "no-console": 1,
+        "no-debugger": 1,
+        "no-extra-semi": 1,
+        "no-extra-parens": [
+            1,
+            "functions"
+        ],
+        "no-irregular-whitespace": 1,
+        "no-undef": 0,
+        "no-unused-vars": 0,
+        "@typescript-eslint/no-unused-vars": "warn",
+        "semi": 2,
+        "indent": [
+            "error",
+            4,
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "quotes": [
+            2,
+            "double",
+            {
+                "avoidEscape": true,
+                "allowTemplateLiterals": false
+            }
+        ],
+        "no-else-return": 2,
+        "object-property-newline": 2,
+        "max-len": [
+            0,
+            110
+        ],
+        "no-var": 1,
+        "one-var": [
+            2,
+            "never"
+        ],
+        "curly": [
+            1,
+            "all"
+        ],
+        "block-spacing": [
+            2,
+            "always"
+        ],
+        "brace-style": [
+            2,
+            "1tbs"
+        ],
+        "linebreak-style": [
+            1,
+            "windows"
+        ],
+        "eol-last": [
+            0,
+            "never"
+        ],
+        "no-trailing-spaces": "error",
+        "@typescript-eslint/triple-slash-reference": [
+            0,
+            {
+                "types": "never",
+                "lib": "always"
+            }
+        ]
+    },
+    "overrides": [
+        {
+            "files": [
+                "packages/**/*.js",
+                "packages/**/*.ts"
+            ]
+        }
+    ]
+}

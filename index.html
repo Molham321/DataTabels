@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./assets/styles/style.css">
     <title>Fetch API & Web Components</title>
 </head>
 <body>
-    <!-- Navbar -->
+    <!-- Navbar Component -->
     <navigation-bar active="home" breakpoint="576">
         <a slot="brand" href="#">Navbar</a>
         <a href="#">Home</a>
@@ -16,7 +16,7 @@
         <a href="#">Content</a>
     </navigation-bar>
 
-    <!-- user-card -->
+    <!-- user-card Component -->
     <user-card name="John Doe" avatar = "https://randomuser.me/api/portraits/men/1.jpg">
         <div slot="email">johndoe@gmail.com</div>
         <div slot="phone">555-555-5555</div>
@@ -27,15 +27,13 @@
         <div slot="phone">999-999-9999</div>
     </user-card>
 
-    <!-- fetch table -->
-    <h1 class="text-center">Storing API data in table</h1>
-    <table id = "customers">
-        <tbody id="table_body">
-        </tbody>
-    </table>
+    <!-- DataTabels Component => fetch table -->
+    <!-- "api" macht nicht viel sinn, weil wir mussen erst DB spalten namen wissen -->
+    <d-tabel api="https://reqres.in/api/users" />
 
-    <script src="./script.js"></script>
-    <script src="./userCard.js"></script>
-    <script src="./navigationBar.js"></script>
+    <script src="./assets/js/userCard.js"></script>
+    <script src="./assets/js/navigationBar.js"></script>
+    <script src="./assets/js/dataTabels.js"></script>
+
 </body>
 </html>

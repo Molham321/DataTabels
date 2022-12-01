@@ -55,33 +55,47 @@ input[type=search] {
 </div>
 `;
 
+type Data = {
+    id: number,
+    email: string,
+    first_name: string,
+    last_name: string,
+    avatar: string
+};
+
+type Props = {
+    api: string | null
+}
+
 class DataTabels extends HTMLElement {
     constructor() {
         super();
 
         this.attachShadow({ mode: "open" });
-        this.shadowRoot.appendChild(Ctable.content.cloneNode(true));
+        this.shadowRoot?.appendChild(Ctable.content.cloneNode(true));
     }
 
-    fetchData = async (api) => {
+    fetchData = async (api: RequestInfo | URL | null) => {
         try {
-            const res = await fetch(api);
+            const res = await fetch(api as URL);
             const data = await res.json();
             if (!res.ok) {
                 throw new Error(`${data.description}`);
             }
             return data.data;
-        } catch (e) {
+        } catch (error) {
             throw new Error(`Something went wrong! ${error}`);
         }
     };
 
-    showtable = (data) => {
-        let tbody = this.shadowRoot.querySelector("tbody");
-        let thead = this.shadowRoot.querySelector("thead");
+
+
+    showtable = (data: Data[]) => {
+        const tbody: HTMLElement = this.shadowRoot?.querySelector("tbody") as HTMLElement;
+        const thead: HTMLElement = this.shadowRoot?.querySelector("thead") as HTMLElement;
 
         let tableData = "";
-        data.map((values) => {
+        data.map((values: { id: number; email: string; first_name: string; last_name: string; avatar: string; }) => {
             tableData += `            
             <tr>
             <td>${values.id}</td>
@@ -93,8 +107,8 @@ class DataTabels extends HTMLElement {
             `;
         });
 
-        let keys = Object.keys(data[0]);
-        let tableHead = `
+        const keys = Object.keys(data[0]);
+        const tableHead = `
         <tr>
             <th id="id">${keys[0]}</th>
             <th id="email">${keys[1]}</th>
@@ -108,9 +122,10 @@ class DataTabels extends HTMLElement {
         thead.innerHTML = tableHead;
     };
 
-    search = (data) => {
+    search = (data: Data[]) => {
 
-        const searchText = this.shadowRoot.querySelector("#search").value.toLowerCase();
+        const searchElement = this.shadowRoot?.querySelector("#search") as HTMLInputElement;
+        const searchText = searchElement.value.toLowerCase();
         localStorage.setItem("searchText", searchText);
 
         const newData = data.filter((v) => {
@@ -129,17 +144,22 @@ class DataTabels extends HTMLElement {
  * @param {number} column The index of the column to sort
  * @param {boolean} asc Determines if the sorting will be in ascending
  */
-    sortTableByColumn(table, column, asc = true) {
+    sortTableByColumn(table: HTMLTableElement, column: number, asc = true) {
         const dirModifier = asc ? 1 : -1;
         const tBody = table.tBodies[0];
         const rows = Array.from(tBody.querySelectorAll("tr"));
 
         // Sort each row
-        const sortedRows = rows.sort((a, b) => {
-            const aColText = a.querySelector(`td:nth-child(${column + 1})`).textContent.trim();
-            const bColText = b.querySelector(`td:nth-child(${column + 1})`).textContent.trim();
+        const sortedRows = rows.sort((a: HTMLElement, b: HTMLElement): number  => {
 
-            return aColText > bColText ? (1 * dirModifier) : (-1 * dirModifier);
+            const aColText: string | undefined = a.querySelector(`td:nth-child(${column + 1})`)?.textContent?.trim();
+            const bColText: string | undefined = b.querySelector(`td:nth-child(${column + 1})`)?.textContent?.trim();
+
+            if(aColText !== undefined && bColText !== undefined) {
+                return aColText > bColText ? (1 * dirModifier) : (-1 * dirModifier);
+            }
+            return -1;
+
         });
 
         // Remove all existing TRs from the table
@@ -152,25 +172,28 @@ class DataTabels extends HTMLElement {
 
         // Remember how the column is currently sorted
         table.querySelectorAll("th").forEach(th => th.classList.remove("th-sort-asc", "th-sort-desc"));
-        table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("th-sort-asc", asc);
-        table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("th-sort-desc", !asc);
+        table.querySelector(`th:nth-child(${column + 1})`)?.classList.toggle("th-sort-asc", asc);
+        table.querySelector(`th:nth-child(${column + 1})`)?.classList.toggle("th-sort-desc", !asc);
     }
     async connectedCallback() {
         // get all values
-        const props = { api: this.getAttribute("api") };
-        const data = await this.fetchData(props.api);
-        const storedData = JSON.parse(localStorage.getItem("data"));
-        const searchText = localStorage.getItem("searchText");
+        const props: Props = { api: this.getAttribute("api") };
+        const data: Data[] = await this.fetchData(props.api);
+        const storedData: Data[] = JSON.parse(localStorage.getItem("data") as string);
+        const searchText: string | null = localStorage.getItem("searchText");
 
         // get searchText
-        this.shadowRoot.querySelector("#search").value = searchText;
+        let searchElement: HTMLInputElement  = this.shadowRoot?.querySelector("#search") as HTMLInputElement;
+        searchElement.value = searchText as string;
+
         (storedData) ? this.showtable(storedData) : this.showtable(data);
 
         // get search result on keyup
-        this.shadowRoot.querySelector("#search").addEventListener("keyup", () => {
+        this.shadowRoot?.querySelector("#search")?.addEventListener("keyup", () => {
             const newData = this.search(data);
             if (newData.length === 0) {
-                this.shadowRoot.querySelector("tbody").innerHTML = "<span>Not Found</span>";
+                this.shadowRoot!.querySelector("tbody")!.innerHTML = "<span>Not Found</span>";
+   
             } else {
                 this.showtable(newData);
                 localStorage.setItem("data", JSON.stringify(newData));
@@ -178,10 +201,10 @@ class DataTabels extends HTMLElement {
         });
 
         // sort
-        this.shadowRoot.querySelectorAll(".table-sortable th").forEach(headerCell => {
+        this.shadowRoot!.querySelectorAll(".table-sortable th").forEach(headerCell => {
             headerCell.addEventListener("click", () => {
-                const tableElement = headerCell.parentElement.parentElement.parentElement;
-                const headerIndex = Array.prototype.indexOf.call(headerCell.parentElement.children, headerCell);
+                const tableElement: HTMLTableElement  = headerCell!.parentElement!.parentElement!.parentElement as HTMLTableElement;
+                const headerIndex = Array.prototype.indexOf.call(headerCell!.parentElement!.children, headerCell);
                 const currentIsAscending = headerCell.classList.contains("th-sort-asc");
 
                 this.sortTableByColumn(tableElement, headerIndex, !currentIsAscending);
@@ -190,15 +213,16 @@ class DataTabels extends HTMLElement {
     }
 
     disconnectedCallback() {
-        this.shadowRoot.querySelector("#search").addEventListener("keyup", () => {
-            this.removeEventListener();
+        this.shadowRoot!.querySelector("#search")!.addEventListener("keyup", () => {
+            this.removeEventListener("keyup", () => {});
         });
 
-        this.shadowRoot.querySelectorAll("th").forEach((th) => {
+        this.shadowRoot!.querySelectorAll("th").forEach((th) => {
             th.addEventListener("click", () => {
-                this.removeEventListener();
+                this.removeEventListener("click", () => {});
             });
         });
+        
     }
 }
 

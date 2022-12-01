@@ -1,3 +1,4 @@
+"use strict";
 const template = document.createElement("template");
 template.innerHTML = `
     <style>
@@ -44,47 +45,45 @@ template.innerHTML = `
         </div>
     </div>
 `;
-
 class UserCard extends HTMLElement {
     constructor() {
+        var _a;
         super();
-
         this.showInfo = true;
-
-        this.attachShadow({mode: "open"});
-        this.shadowRoot.appendChild(template.content.cloneNode(true));
-
+        this.attachShadow({ mode: "open" });
+        (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.appendChild(template.content.cloneNode(true));
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         this.shadowRoot.querySelector("h3").innerText = this.getAttribute("name");
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         this.shadowRoot.querySelector("img").src = this.getAttribute("avatar");
     }
-
     toggelInfo() {
+        var _a, _b;
         this.showInfo = !this.showInfo;
-
-        const info = this.shadowRoot.querySelector(".info");
-        const toggleBtn = this.shadowRoot.querySelector("#toggle-info");
-
-        if(this.showInfo) {
+        const info = (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector(".info");
+        const toggleBtn = (_b = this.shadowRoot) === null || _b === void 0 ? void 0 : _b.querySelector("#toggle-info");
+        if (this.showInfo) {
             info.style.display = "block";
             toggleBtn.innerText = "Hide info";
-        } else {
+        }
+        else {
             info.style.display = "none";
             toggleBtn.innerText = "Show info";
         }
     }
-
     connectedCallback() {
-        this.shadowRoot.querySelector("#toggle-info").addEventListener("click", () => {
+        var _a, _b;
+        (_b = (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector("#toggle-info")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => {
             this.toggelInfo();
         });
     }
-
     disconnectedCallback() {
-        this.shadowRoot.querySelector("#toggle-info").addEventListener("click", () => {
-            this.removeEventListener();
+        var _a, _b;
+        (_b = (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector("#toggle-info")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => {
+            this.removeEventListener("click", () => {
+                this.toggelInfo();
+            });
         });
     }
-
 }
-
 window.customElements.define("user-card", UserCard);

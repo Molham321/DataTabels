@@ -5,6 +5,7 @@
   "main": "dataTabels.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc --watch",
     "lint": "eslint ./"
   },
   "repository": {
@@ -21,6 +22,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "eslint": "^8.28.0",
-    "eslint-config-google": "^0.14.0"
+    "eslint-config-google": "^0.14.0",
+    "typescript": "^4.9.3"
   }
 }

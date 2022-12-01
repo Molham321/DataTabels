@@ -1,4 +1,5 @@
-const navbar = document.createElement('template')
+"use strict";
+const navbar = document.createElement("template");
 navbar.innerHTML = `
 <style>
   header {
@@ -53,70 +54,61 @@ navbar.innerHTML = `
   }
 </style>
 <header>
-  <div>
-    <slot name="brand" class="logo"></slot>
-  </div>
-  <nav>
-    <slot></slot>
-  </nav>
+    <div>
+      <slot name="brand" class="logo"></slot>
+    </div>
+    <nav>
+      <slot></slot>
+    </nav>
 </header>
-`
-
+`;
 class Navbar extends HTMLElement {
     constructor() {
+        var _a;
         super();
-        this.attachShadow({ mode: 'open' });
-        this.shadowRoot.appendChild(navbar.content.cloneNode(true))
+        this.attachShadow({ mode: "open" });
+        (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.appendChild(navbar.content.cloneNode(true));
     }
-
     connectedCallback() {
-
+        var _a, _b, _c, _d, _e;
         const props = {
-            active: this.getAttribute('active'),
-            breakpoint: this.getAttribute('breakpoint')
-        }
-
-        const btn = new NavbarBtn(props.breakpoint)
-        this.shadowRoot.querySelector('header div').append(btn)
-
+            active: this.getAttribute("active"),
+            breakpoint: this.getAttribute("breakpoint")
+        };
+        const btn = new NavbarBtn(props.breakpoint);
+        (_b = (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector("header div")) === null || _b === void 0 ? void 0 : _b.append(btn);
         const data = {
-            header: this.shadowRoot.querySelector('header'),
-            button: this.shadowRoot.querySelector('header navbar-btn'),
-            nav: this.shadowRoot.querySelector('header nav'),
-            links: document.querySelectorAll('navigation-bar a'),
-        }
-
-        const dist = data.nav.offsetHeight - 32
-
-        this.checkIfMobile(data.nav, props.breakpoint, dist)
-
-        this.createStyle(data.header.offsetHeight)
-        this.breakpointStyles(props.breakpoint, props.position)
-
-        this.setActiveLink(data.links, props.active)
-        data.button.addEventListener('click', () => {
-            data.nav.classList.toggle('show')
-        })
-        window.addEventListener('resize', () => { this.checkIfMobile(data.nav, props.breakpoint, dist) })
+            header: (_c = this.shadowRoot) === null || _c === void 0 ? void 0 : _c.querySelector("header"),
+            button: (_d = this.shadowRoot) === null || _d === void 0 ? void 0 : _d.querySelector("header navbar-btn"),
+            nav: (_e = this.shadowRoot) === null || _e === void 0 ? void 0 : _e.querySelector("header nav"),
+            links: document.querySelectorAll("navigation-bar a"),
+        };
+        const dist = data.nav.offsetHeight - 32;
+        this.checkIfMobile(data.nav, props.breakpoint, dist);
+        this.createStyle(data.header.offsetHeight);
+        this.breakpointStyles(props.breakpoint, props.position);
+        this.setActiveLink(data.links, props.active);
+        data.button.addEventListener("click", () => {
+            data.nav.classList.toggle("show");
+        });
+        window.addEventListener("resize", () => {
+            this.checkIfMobile(data.nav, props.breakpoint, dist);
+        });
     }
-
     disconnectedCallback() {
-        window.removeEventListener('resize', this.checkIfMobile)
+        window.removeEventListener("resize", this.checkIfMobile);
     }
-
     setActiveLink(elements, attr) {
         elements.forEach((link) => {
             if (link.innerHTML.toLowerCase() === attr.toLowerCase()) {
-                link.classList.add('nav-link--active')
+                link.classList.add("nav-link--active");
             }
-        })
+        });
     }
-
     createStyle(distance) {
         const styles = `.show { transform: translateY(${distance}px) !important; }`;
-        this.shadowRoot.querySelector('style').append(styles)
+        this.shadowRoot.querySelector("style").append(styles);
     }
-
     breakpointStyles(breakpoint) {
         const styles = `
     @media screen and (min-width: ${breakpoint}px) {
@@ -140,28 +132,26 @@ class Navbar extends HTMLElement {
         padding: 0 1rem;
       }
     }
-    `
-        this.shadowRoot.querySelector('style').append(styles)
+    `;
+        this.shadowRoot.querySelector("style").append(styles);
     }
-
     calTransDistance(nav) {
-        return nav.offsetHeight
+        return nav.offsetHeight;
     }
-
     checkIfMobile(nav, breakpoint, distance) {
         if (window.innerWidth < breakpoint) {
-            nav.style.transform = `translateY(-${distance}px)`
+            nav.style.transform = `translateY(-${distance}px)`;
             setTimeout(() => {
-                nav.classList.add('animate')
-            }, 1)
-        } else {
-            nav.classList.remove('show')
-            nav.classList.remove('animate')
+                nav.classList.add("animate");
+            }, 1);
+        }
+        else {
+            nav.classList.remove("show");
+            nav.classList.remove("animate");
         }
     }
 }
-
-const navbarBtn = document.createElement('template')
+const navbarBtn = document.createElement("template");
 navbarBtn.innerHTML = `
 <style>
   button {
@@ -206,36 +196,31 @@ navbarBtn.innerHTML = `
   <div></div>
   <div></div>
 </button>
-`
-
+`;
 class NavbarBtn extends HTMLElement {
     constructor(breakpoint) {
         super();
-        this.attachShadow({ mode: 'open' });
+        this.attachShadow({ mode: "open" });
         this.shadowRoot.appendChild(navbarBtn.content.cloneNode(true));
         this.breakpoint = breakpoint;
     }
-
     connectedCallback() {
-        const btn = this.shadowRoot.querySelector('button')
-
-        btn.addEventListener('click', () => {
-            btn.classList.toggle('change')
-        })
-
-        window.addEventListener('resize', () => { this.reset(btn, this.breakpoint) })
+        const btn = this.shadowRoot.querySelector("button");
+        btn.addEventListener("click", () => {
+            btn.classList.toggle("change");
+        });
+        window.addEventListener("resize", () => {
+            this.reset(btn, this.breakpoint);
+        });
     }
-
     disconnectedCallback() {
-        window.removeEventListener('resize', this.reset)
+        window.removeEventListener("resize", this.reset);
     }
-
     reset(element, breakpoint) {
-        if (window.innerWidth > breakpoint && element.classList.contains('change')) {
-            element.classList.remove('change')
+        if (window.innerWidth > breakpoint && element.classList.contains("change")) {
+            element.classList.remove("change");
         }
     }
 }
-
-window.customElements.define('navbar-btn', NavbarBtn)
-window.customElements.define('navigation-bar', Navbar)
+window.customElements.define("navbar-btn", NavbarBtn);
+window.customElements.define("navigation-bar", Navbar);

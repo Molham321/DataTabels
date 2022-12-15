@@ -159,6 +159,7 @@ class DataTabels extends HTMLElement {
         (_b = table.querySelector(`th:nth-child(${column + 1})`)) === null || _b === void 0 ? void 0 : _b.classList.toggle("th-sort-desc", !asc);
     }
     connectedCallback() {
+        var _a, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
             // get all values
             const props = { api: this.getAttribute("api") };
@@ -166,10 +167,11 @@ class DataTabels extends HTMLElement {
             const storedData = JSON.parse(localStorage.getItem("data"));
             const searchText = localStorage.getItem("searchText");
             // get searchText
-            this.shadowRoot.querySelector("#search").value = searchText;
+            let searchElement = (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector("#search");
+            searchElement.value = searchText;
             (storedData) ? this.showtable(storedData) : this.showtable(data);
             // get search result on keyup
-            this.shadowRoot.querySelector("#search").addEventListener("keyup", () => {
+            (_c = (_b = this.shadowRoot) === null || _b === void 0 ? void 0 : _b.querySelector("#search")) === null || _c === void 0 ? void 0 : _c.addEventListener("keyup", () => {
                 const newData = this.search(data);
                 if (newData.length === 0) {
                     this.shadowRoot.querySelector("tbody").innerHTML = "<span>Not Found</span>";
@@ -192,11 +194,11 @@ class DataTabels extends HTMLElement {
     }
     disconnectedCallback() {
         this.shadowRoot.querySelector("#search").addEventListener("keyup", () => {
-            this.removeEventListener();
+            this.removeEventListener("keyup", () => { });
         });
         this.shadowRoot.querySelectorAll("th").forEach((th) => {
             th.addEventListener("click", () => {
-                this.removeEventListener();
+                this.removeEventListener("click", () => { });
             });
         });
     }
